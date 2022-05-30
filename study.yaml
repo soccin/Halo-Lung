@@ -3,8 +3,6 @@
 #
 
 studyName: Lung
-cohort: Cohort1
-panel: Panel01
 
 setName: set01
 DATA_ROOT: /juno/res/bic/shared/Multiomyx/Projects
@@ -16,20 +14,20 @@ HALOX_GITVERSION: project/Lung
 #
 
 SAMPLES: ${studyName}_Samples__V1
-MARKERS: ${studyName}_${panel}_Markers__V0
+MARKERS: ${studyName}_Markers__V0
 FOVS: ${studyName}_FOVs__V1
-CELLTYPES: ${studyName}_${panel}_CellTypes__V0
+CELLTYPES: ${studyName}_CellTypes__V0
 
 #
 # Should not need to modify these
 #
 
-METADATA_DIR: ${DATA_ROOT}/${studyName}/${cohort}/${panel}/input/meta1/${setName}
+METADATA_DIR: ${DATA_ROOT}/${studyName}/input/meta1/${setName}
 
-HALOCSV_DIR: ${DATA_ROOT}/${studyName}/${cohort}/${panel}/input/raw/${setName}/HaloSpreadsheets
+HALOCSV_DIR: ${DATA_ROOT}/${studyName}/input/raw/${setName}/HaloSpreadsheets
 
-EXCLUSION_DIR: ${DATA_ROOT}/${studyName}/${cohort}/${panel}/input/raw/${setName}/HaloCoordinates/Tissue_Layer1
-DRIFTDATA_DIR: ${DATA_ROOT}/${studyName}/${cohort}/${panel}/intermediate/drift/${setName}/drift_summary
+EXCLUSION_DIR: ${DATA_ROOT}/${studyName}/input/raw/${setName}/HaloCoordinates/Tissue_Layer1
+DRIFTDATA_DIR: ${DATA_ROOT}/${studyName}/intermediate/drift/${setName}/drift_summary
 
 
 #
