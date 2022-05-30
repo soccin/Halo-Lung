@@ -1,6 +1,3 @@
-# Halo-XYZ
+# Halo-Lung
 
-TEMPLATE::Study specifc files for Halo XYZ Project
-
-- Added study.yaml for setup
-
+Study specifc files for Halo Lung Project

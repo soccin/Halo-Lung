@@ -2,14 +2,14 @@
 # Analysis specific settings
 #
 
-studyName: XYZ
+studyName: Lung
 cohort: Cohort1
 panel: Panel01
 
 setName: set01
 DATA_ROOT: /juno/res/bic/shared/Multiomyx/Projects
 
-HALOX_GITVERSION: project/XYZ
+HALOX_GITVERSION: project/Lung
 
 #
 # Phase-I metadata file; select version to use
