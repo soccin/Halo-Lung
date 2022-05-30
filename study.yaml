@@ -1,0 +1,49 @@
+#
+# Analysis specific settings
+#
+
+studyName: XYZ
+cohort: Cohort1
+panel: Panel01
+
+setName: set01
+DATA_ROOT: /juno/res/bic/shared/Multiomyx/Projects
+
+HALOX_GITVERSION: project/XYZ
+
+#
+# Phase-I metadata file; select version to use
+#
+
+SAMPLES: ${studyName}_Samples__V1
+MARKERS: ${studyName}_${panel}_Markers__V0
+FOVS: ${studyName}_FOVs__V1
+CELLTYPES: ${studyName}_${panel}_CellTypes__V0
+
+#
+# Should not need to modify these
+#
+
+METADATA_DIR: ${DATA_ROOT}/${studyName}/${cohort}/${panel}/input/meta1/${setName}
+
+HALOCSV_DIR: ${DATA_ROOT}/${studyName}/${cohort}/${panel}/input/raw/${setName}/HaloSpreadsheets
+
+EXCLUSION_DIR: ${DATA_ROOT}/${studyName}/${cohort}/${panel}/input/raw/${setName}/HaloCoordinates/Tissue_Layer1
+DRIFTDATA_DIR: ${DATA_ROOT}/${studyName}/${cohort}/${panel}/intermediate/drift/${setName}/drift_summary
+
+
+#
+# Hardware / Imaging Parameters
+#
+
+#
+# Microscope parameters
+#
+scalingPx2Microns:
+  Cytell 1: 0.293
+  Cytell 2: 0.293
+  Incell 2500: 0.325
+  Incell2500: 0.325
+
+haloVersion: v3.2.1851.354
+
