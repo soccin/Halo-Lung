@@ -1,5 +1,5 @@
 # red
-HRS: '#D83631'
+Tumor: '#D83631'
 
 # blues/greens
 T_All: '#2073ac'
@@ -26,6 +26,12 @@ Macrophage_All: '#924596'
 Macrophage_Other: '#6a4596'
 Macrophage_MHCIIpos: '#bf7bc2'
 Macrophage_MHCIIneg: '#e6cbe7'
+
+# purples
+Myeloid_All: '#924596'
+DC: '#6a4596'
+MHCIIneg_macro: '#e6cbe7'
+MHCIIpos_macro: '#bf7bc2'
 
 # pink
 Plasma: '#ff76b6'

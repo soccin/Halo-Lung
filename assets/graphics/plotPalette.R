@@ -1,7 +1,12 @@
 require(yaml)
 require(tidyverse)
 
-paletteFile="global_plot_colors.yaml"
+args=commandArgs(trailing=T)
+if(len(args)>0) {
+    paletteFile=args[1]
+} else{
+    paletteFile="global_plot_colors.yaml"
+}
 
 pal=read_yaml(paletteFile)
 
