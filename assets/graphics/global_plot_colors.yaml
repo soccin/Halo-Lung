@@ -33,16 +33,21 @@ DC: '#6a4596'
 MHCIIneg_macro: '#e6cbe7'
 MHCIIpos_macro: '#bf7bc2'
 
+# Other_All Endothelial cell  Endo  Endothelial
+Endo: '#a24c29'
+
+#darkgray
+superNeg: '#7b7b7b'
+#lightgray
+UNKNOWN: '#e8e8e8'
+
+# LEGACY TYPES
 # pink
 Plasma: '#ff76b6'
 #brown
 Granulocyte: '#a24c29'
 #charcoal
 Leukocyte_Other: '#343434'
-#darkgray
-superNeg: '#7b7b7b'
-#lightgray
-UNKNOWN: '#e8e8e8'
 
 
 
