@@ -7,7 +7,7 @@ studyName: Lung
 setName: set01
 DATA_ROOT: /juno/res/bic/shared/Multiomyx/Projects
 
-HALOX_GITVERSION: ver/halo_v4
+HALOX_GITVERSION: project/Lung
 
 #
 # Phase-I metadata file; select version to use
