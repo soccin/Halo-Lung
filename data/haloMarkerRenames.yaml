@@ -1,0 +1,6 @@
+#
+# Add marker rename rules here
+#
+
+markerRenames:
+  DAPI1: DAPI
