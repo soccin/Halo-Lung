@@ -5,7 +5,8 @@
 studyName: Lung
 
 setName: set01
-DATA_ROOT: /juno/res/bic/shared/Multiomyx/Projects
+#DATA_ROOT: /juno/res/bic/shared/Multiomyx/Projects
+DATA_ROOT: /rtsess01/compute/juno/bic/juno/res/bic/shared/Multiomyx/Projects
 
 HALOX_GITVERSION: project/Lung
 
