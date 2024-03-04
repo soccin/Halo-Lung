@@ -4,6 +4,6 @@ ls rda/v6_Normalized/L_0*rda \
 mkdir -p out/reassign/03
 mv stats_Reassign03_* out/reassign/03
 Rscript config/scripts/makeReassign03Report.R 
-mkdir rda/v6_Reassign
+mkdir -p rda/v6_Reassign
 mv L*rda rda/v6_Reassign/
 
