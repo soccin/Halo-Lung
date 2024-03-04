@@ -1,6 +1,6 @@
 
 ls rda/v6_Normalized/L_0*rda \
-    | parallel -j 12 Rscript config/scripts/reassign03.R config/study.yaml 2>ERR >LOG
+    | parallel -j 12 Rscript config/scripts/reassign03.R config/study.yaml 2>&1 | tee reassign.log
 mkdir -p out/reassign/03
 mv stats_Reassign03_* out/reassign/03
 Rscript config/scripts/makeReassign03Report.R 
