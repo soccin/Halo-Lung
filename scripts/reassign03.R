@@ -25,9 +25,19 @@ if(len(ii)>0) {
 }
 
 ####################################################################################
+getRanksPerMarkerByFOV<-function(oo) {
+    oo$marker.data %>%
+        left_join(oo$geom.data,by="UUID") %>%
+        filter(!Exclude) %>%
+        filter(!is.na(TIntensity)) %>%
+        group_by(SPOT,Marker) %>%
+        mutate(R=rank(TIntensity),Pr=(R+1)/(n()+2)) %>%
+        ungroup %>%
+        select(UUID,Marker,R,Pr)
+}
+####################################################################################
 source("HaloX/parseAI.R")
 source("HaloX/tools.R")
-source("HaloX/HaloCore/utils.R")
 source("HaloX/HaloCore/R/assign_cell_types.R")
 source("HaloX/VERSION.R")
 ####################################################################################
@@ -111,176 +121,184 @@ compPCTSubtype<-function(ctbl) {
 ct=getCellTypes(obj$marker.data)
 ct_orig=ct
 
+ct_T_All=count(ct_orig,Cell_type) %>% filter(Cell_type=="T_All") %>% pull(n)
+
 #
-# Step 3-A: Resolution of T cell/null phenotype population
+# Check we have enough T_cells
 #
-# MUST BE DONE AFTER Step 2 and after type reassignment
-#
-# 1. Take T cell/null phenotype population (double neg cells CD4/CD8)
-#
-
-cells_Tnull=obj$geom.data %>%
-    filter(!Exclude) %>%
-    left_join(ct,by=c("UUID","Sample")) %>%
-    filter(Subtype=="T_Null") %>% pull(UUID)
-
-# 2. If PCT[CD4-,CD8-]>5%
-
-pct_DN=compPCTSubtype(ct)
-
-fovsGt5pctDN=pct_DN %>%
-    filter(Subtype=="T_Null" & PCT>0.05) %>%
-    pull(FOV)
-
-if(len(fovsGt5pctDN)>0) {
+if(len(ct_T_All)>0 && ct_T_All>1000) {
 
     #
-    # 2. then drop CD4,CD8 completeness threshold for cells that meet cytoplasmic intensity threshold
+    # Step 3-A: Resolution of T cell/null phenotype population
+    #
+    # MUST BE DONE AFTER Step 2 and after type reassignment
+    #
+    # 1. Take T cell/null phenotype population (double neg cells CD4/CD8)
     #
 
-    tblRA=obj$marker.data %>%
-        filter(Marker %in% c("CD4","CD8")) %>%
-        filter(UUID %in% cells_Tnull) %>%
-        left_join(ct %>% select(UUID,FOV)) %>%
-        filter(FOV %in% fovsGt5pctDN) %>%
-        select(UUID,Marker,TIntensity,Positive_Classification) %>%
-        left_join(thetas) %>%
-        mutate(New.Pos=ifelse(TIntensity>theta,1,0)) %>%
-        select(UUID,Marker,New.Pos)
-
-    marker_new=obj$marker.data %>%
-        left_join(tblRA) %>%
-        mutate(Positive_Classification.orig=Positive_Classification) %>%
-        mutate(Positive_Classification=ifelse(is.na(New.Pos),Positive_Classification.orig,New.Pos)) %>%
-        select(-New.Pos)
-
-    ct_new=getCellTypes(marker_new)
-    obj$marker.data=marker_new
-
-    cells_Tnull_new=obj$geom.data %>%
+    cells_Tnull=obj$geom.data %>%
         filter(!Exclude) %>%
-        left_join(ct_new,by=c("UUID","Sample")) %>%
+        left_join(ct,by=c("UUID","Sample")) %>%
         filter(Subtype=="T_Null") %>% pull(UUID)
 
-    pct_DN_new=compPCTSubtype(ct_new)
-    fovsGt5pctDN=pct_DN_new %>%
+    # 2. If PCT[CD4-,CD8-]>5%
+
+    pct_DN=compPCTSubtype(ct)
+
+    fovsGt5pctDN=pct_DN %>%
         filter(Subtype=="T_Null" & PCT>0.05) %>%
         pull(FOV)
 
     if(len(fovsGt5pctDN)>0) {
+
         #
-        # If PCT[CD4-,CD8-]>5% then take remainder of cells (cells that both fail the CD4 and CD8 intensity thresholds)
-        #   Rank reassignment for CD4/CD8 (5% T cell/null phenotype cells allowed)
-        #       If CD4 “wins”: CD4 positivity switches to positive
-        #           Cell becomes a CD4+ T cell
-        #       If CD8 “wins”: CD8 positivity switches to positive
-        #           Cell becomes a CD8+ T cell
+        # 2. then drop CD4,CD8 completeness threshold for cells that meet cytoplasmic intensity threshold
         #
-        rr=getRanksPerMarkerByFOV(obj)
-        tblRA2=rr %>%
+
+        tblRA=obj$marker.data %>%
             filter(Marker %in% c("CD4","CD8")) %>%
-            filter(UUID %in% cells_Tnull_new) %>%
+            filter(UUID %in% cells_Tnull) %>%
             left_join(ct %>% select(UUID,FOV)) %>%
             filter(FOV %in% fovsGt5pctDN) %>%
+            select(UUID,Marker,TIntensity,Positive_Classification) %>%
+            left_join(thetas) %>%
+            mutate(New.Pos=ifelse(TIntensity>theta,1,0)) %>%
+            select(UUID,Marker,New.Pos)
+
+        marker_new=obj$marker.data %>%
+            left_join(tblRA) %>%
+            mutate(Positive_Classification.orig=Positive_Classification) %>%
+            mutate(Positive_Classification=ifelse(is.na(New.Pos),Positive_Classification.orig,New.Pos)) %>%
+            select(-New.Pos)
+
+        ct_new=getCellTypes(marker_new)
+        obj$marker.data=marker_new
+
+        cells_Tnull_new=obj$geom.data %>%
+            filter(!Exclude) %>%
+            left_join(ct_new,by=c("UUID","Sample")) %>%
+            filter(Subtype=="T_Null") %>% pull(UUID)
+
+        pct_DN_new=compPCTSubtype(ct_new)
+        fovsGt5pctDN=pct_DN_new %>%
+            filter(Subtype=="T_Null" & PCT>0.05) %>%
+            pull(FOV)
+
+        if(len(fovsGt5pctDN)>0) {
+            #
+            # If PCT[CD4-,CD8-]>5% then take remainder of cells (cells that both fail the CD4 and CD8 intensity thresholds)
+            #   Rank reassignment for CD4/CD8 (5% T cell/null phenotype cells allowed)
+            #       If CD4 “wins”: CD4 positivity switches to positive
+            #           Cell becomes a CD4+ T cell
+            #       If CD8 “wins”: CD8 positivity switches to positive
+            #           Cell becomes a CD8+ T cell
+            #
+            rr=getRanksPerMarkerByFOV(obj)
+            tblRA2=rr %>%
+                filter(Marker %in% c("CD4","CD8")) %>%
+                filter(UUID %in% cells_Tnull_new) %>%
+                left_join(ct %>% select(UUID,FOV)) %>%
+                filter(FOV %in% fovsGt5pctDN) %>%
+                select(-R) %>%
+                spread(Marker,Pr) %>%
+                mutate(lOR=log((CD4/(1-CD4))/(CD8/(1-CD8)))) %>%
+                arrange(desc(abs(lOR)))
+
+            numCells=pct_DN_new %>%
+                filter(Subtype=="T_Null" & PCT>0.05) %>%
+                mutate(N.PCT.5=round(ST.n-CT.n*0.05)) %>%
+                select(FOV,N.PCT.5)
+
+            cellsToFlip=tblRA2 %>%
+                arrange(desc(abs(lOR))) %>%
+                left_join(numCells) %>%
+                group_by(FOV) %>%
+                mutate(R=rank(-abs(lOR))) %>%
+                filter(R<=N.PCT.5) %>%
+                mutate(Marker=ifelse(lOR>0,"CD4","CD8")) %>%
+                select(UUID,lOR,R,Marker)
+
+            marker_new=obj$marker.data %>%
+                left_join(cellsToFlip) %>%
+                mutate(Positive_Classification=ifelse(!is.na(lOR),1,Positive_Classification)) %>%
+                select(-FOV,-lOR,-R)
+
+            obj$marker.data=marker_new
+
+        }
+
+
+
+    }
+
+    rpt0=pct_DN %>% select(Sample,FOV,Subtype,PCT.ST.T) %>% spread(Subtype,PCT.ST.T,fill=0) %>% arrange(desc(T_Null))
+
+    #
+    # Step 3-B: Resolution of CD4+/CD8+ T cells
+    #
+    # 0. MUST BE DONE AFTER Step 2, Step 3-A and after type reassignment
+    # 1. Take CD4+/CD8+ T cell population
+    # 2. Rank assignment for CD4/CD8 (5% CD4+/CD8+ T cells allowed)
+
+    ct=getCellTypes(obj$marker.data)
+    pct_ST=compPCTSubtype(ct)
+
+    rpt1=pct_ST %>% select(Sample,FOV,Subtype,PCT.ST.T) %>% spread(Subtype,PCT.ST.T,fill=0) %>% arrange(desc(T_Null))
+
+    fovsGt5pctDP=pct_ST %>%
+        filter(Subtype=="T_CD4/CD8" & PCT>0.05) %>%
+        pull(FOV)
+
+    if(len(fovsGt5pctDP)>0) {
+        #
+        # 1. Take CD4+/CD8+ T cell population
+        #
+        cells_Tdp=obj$geom.data %>%
+            filter(!Exclude) %>%
+            left_join(ct,by=c("UUID","Sample")) %>%
+            filter(Subtype=="T_CD4/CD8") %>% pull(UUID)
+
+        #
+        #   i. If CD4 “wins”: CD8 positivity switches to negative
+        #       - Cell becomes a CD4+ T cell or CD4+ regulatory T cell
+        #   ii. If CD8 “wins”: CD4 positivity switches to negative
+        #       - Cell becomes a CD8+ T cell or CD8+ regulatory T cell
+        #
+
+        rr=getRanksPerMarkerByFOV(obj)
+        tblDP=rr %>%
+            filter(Marker %in% c("CD4","CD8")) %>%
+            filter(UUID %in% cells_Tdp) %>%
+            left_join(ct %>% select(UUID,FOV)) %>%
+            filter(FOV %in% fovsGt5pctDP) %>%
             select(-R) %>%
             spread(Marker,Pr) %>%
             mutate(lOR=log((CD4/(1-CD4))/(CD8/(1-CD8)))) %>%
             arrange(desc(abs(lOR)))
 
-        numCells=pct_DN_new %>%
-            filter(Subtype=="T_Null" & PCT>0.05) %>%
+        numCells=pct_ST %>%
+            filter(Subtype=="T_CD4/CD8" & PCT>0.05) %>%
             mutate(N.PCT.5=round(ST.n-CT.n*0.05)) %>%
             select(FOV,N.PCT.5)
 
-        cellsToFlip=tblRA2 %>%
+        cellsToFlip=tblDP %>%
             arrange(desc(abs(lOR))) %>%
             left_join(numCells) %>%
             group_by(FOV) %>%
             mutate(R=rank(-abs(lOR))) %>%
             filter(R<=N.PCT.5) %>%
-            mutate(Marker=ifelse(lOR>0,"CD4","CD8")) %>%
+            mutate(Marker=ifelse(lOR<0,"CD4","CD8")) %>%
             select(UUID,lOR,R,Marker)
 
         marker_new=obj$marker.data %>%
             left_join(cellsToFlip) %>%
-            mutate(Positive_Classification=ifelse(!is.na(lOR),1,Positive_Classification)) %>%
+            mutate(Positive_Classification=ifelse(!is.na(lOR),0,Positive_Classification)) %>%
             select(-FOV,-lOR,-R)
 
         obj$marker.data=marker_new
 
+
     }
-
-
-
-}
-
-rpt0=pct_DN %>% select(Sample,FOV,Subtype,PCT.ST.T) %>% spread(Subtype,PCT.ST.T,fill=0) %>% arrange(desc(T_Null))
-
-#
-# Step 3-B: Resolution of CD4+/CD8+ T cells
-#
-# 0. MUST BE DONE AFTER Step 2, Step 3-A and after type reassignment
-# 1. Take CD4+/CD8+ T cell population
-# 2. Rank assignment for CD4/CD8 (5% CD4+/CD8+ T cells allowed)
-
-ct=getCellTypes(obj$marker.data)
-pct_ST=compPCTSubtype(ct)
-
-rpt1=pct_ST %>% select(Sample,FOV,Subtype,PCT.ST.T) %>% spread(Subtype,PCT.ST.T,fill=0) %>% arrange(desc(T_Null))
-
-fovsGt5pctDP=pct_ST %>%
-    filter(Subtype=="T_CD4/CD8" & PCT>0.05) %>%
-    pull(FOV)
-
-if(len(fovsGt5pctDP)>0) {
-    #
-    # 1. Take CD4+/CD8+ T cell population
-    #
-    cells_Tdp=obj$geom.data %>%
-        filter(!Exclude) %>%
-        left_join(ct,by=c("UUID","Sample")) %>%
-        filter(Subtype=="T_CD4/CD8") %>% pull(UUID)
-
-    #
-    #   i. If CD4 “wins”: CD8 positivity switches to negative
-    #       - Cell becomes a CD4+ T cell or CD4+ regulatory T cell
-    #   ii. If CD8 “wins”: CD4 positivity switches to negative
-    #       - Cell becomes a CD8+ T cell or CD8+ regulatory T cell
-    #
-
-    rr=getRanksPerMarkerByFOV(obj)
-    tblDP=rr %>%
-        filter(Marker %in% c("CD4","CD8")) %>%
-        filter(UUID %in% cells_Tdp) %>%
-        left_join(ct %>% select(UUID,FOV)) %>%
-        filter(FOV %in% fovsGt5pctDP) %>%
-        select(-R) %>%
-        spread(Marker,Pr) %>%
-        mutate(lOR=log((CD4/(1-CD4))/(CD8/(1-CD8)))) %>%
-        arrange(desc(abs(lOR)))
-
-    numCells=pct_ST %>%
-        filter(Subtype=="T_CD4/CD8" & PCT>0.05) %>%
-        mutate(N.PCT.5=round(ST.n-CT.n*0.05)) %>%
-        select(FOV,N.PCT.5)
-
-    cellsToFlip=tblDP %>%
-        arrange(desc(abs(lOR))) %>%
-        left_join(numCells) %>%
-        group_by(FOV) %>%
-        mutate(R=rank(-abs(lOR))) %>%
-        filter(R<=N.PCT.5) %>%
-        mutate(Marker=ifelse(lOR<0,"CD4","CD8")) %>%
-        select(UUID,lOR,R,Marker)
-
-    marker_new=obj$marker.data %>%
-        left_join(cellsToFlip) %>%
-        mutate(Positive_Classification=ifelse(!is.na(lOR),0,Positive_Classification)) %>%
-        select(-FOV,-lOR,-R)
-
-    obj$marker.data=marker_new
-
-
 }
 
 if(exists("PCT_DN")) rm("pct_DN")
@@ -322,6 +340,11 @@ stats2=full_join(before,after) %>%
     gather(Metric,Value,Before,After,`R.A/B`) %>%
     unite(CM,Subtype,Metric,sep=".") %>%
     spread(CM,Value)
+
+#
+#
+#
+#
 
 write_csv(stats,cc("stats_Reassign03_A",obj$sample.data$CellDive_ID,".csv"))
 write_csv(stats2,cc("stats_Reassign03_B",obj$sample.data$CellDive_ID,".csv"))
