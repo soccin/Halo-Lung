@@ -1,3 +1,4 @@
+#!/bin/bash
 
 ls rda/v6_Exclusion/L_0*rda \
     | parallel -j 12 Rscript config/scripts/reassign03.R config/study.yaml 2>&1 | tee reassign.log
