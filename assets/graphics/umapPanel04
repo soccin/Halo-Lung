@@ -1,0 +1,2 @@
+Row1: Sex Age_at_diagnosis_abbrev Type Smoking_status_abbrev Patient_history_of_cancer_abbrev Family_history_of_cancer_abbrev 
+Row2: Metastasis_brain Metastasis_multiple Best_overall_response_abbrev PDL1_percent_score_group 
