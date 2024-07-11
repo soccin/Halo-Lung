@@ -48,12 +48,23 @@ clinical:
     'SQCLC': '#90C2E7'          # sky blue
     'Poorly differentiated': '#b07d62'         # brown
     ## Smoking_status_abbrev
+    'Smoker': '#F98866'
+    'Non_smoker': '#A1BE95'
     ## Patient_history_of_cancer_abbrev
+    'Y': '#6290C8'
+    'N': '#f0f0f0'
     ## Family_history_of_cancer_abbrev
+    'Y': '#6290C8'
+    'N': '#f0f0f0'
     ## Metastasis_brain
+    'Y': '#6290C8'
+    'N': '#f0f0f0'
     ## Metastasis_multiple
     'Y': '#6290C8'
     'N': '#f0f0f0'
+    ## Prior_treatment_abbrev
+    'Yes': '#6290C8'
+    'No': '#f0f0f0'
     ## Best_overall_response_abbrev
     'responder': '#16537e'
     'non_responder': '#990000'
@@ -93,5 +104,5 @@ clinical:
     'L_30': '#512065'
     'L_31': '#1c663c'
     'L_32': '#70c05c'
-
     'Unknown': 'grey75'
+
