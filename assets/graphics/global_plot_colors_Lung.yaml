@@ -51,11 +51,11 @@ clinical:
         'Smoker': '#F98866'
         'Non_smoker': '#A1BE95'
     Patient_history_of_cancer_abbrev:
-        'Y': '#6290C8'
-        'N': '#f0f0f0'
+        'Yes': '#6290C8'
+        'No': '#f0f0f0'
     Family_history_of_cancer_abbrev:
-        'Y': '#6290C8'
-        'N': '#f0f0f0'
+        'Yes': '#6290C8'
+        'No': '#f0f0f0'
     Metastasis_brain:
         'Y': '#6290C8'
         'N': '#f0f0f0'
