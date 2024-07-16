@@ -39,7 +39,7 @@ UNKNOWN: '#646664'
 clinical:
     Sex:
         'M': '#4D7298'                      # dark grayish teal
-        'F': '#ffb4a2'                      # peach
+        'F': '#ffb4a2'                      # peach (Color CORRECT but missassinged in code)
     Age_at_diagnosis_abbrev:
         'under50': '#077B8A'
         'over50': '#D72631'
@@ -53,7 +53,7 @@ clinical:
     Patient_history_of_cancer_abbrev:
         'Yes': '#6290C8'
         'No': '#f0f0f0'
-    Family_history_of_cancer_abbrev:
+    Family_history_of_cancer_abbrev:  # NOT CORRECT FIX
         'Yes': '#6290C8'
         'No': '#f0f0f0'
     Metastasis_brain:
