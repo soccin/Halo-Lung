@@ -1,0 +1,111 @@
+### celltype colors
+
+## Version 2024-07-23
+
+## category
+Tumor: &tumor '#EF3340'
+Tumor_All: *tumor
+Immune_All: '#2E86E0'
+Other: '#808080'
+Other_All: '#FFBD20'
+
+## celltype
+T_All: '#04A5FF'
+B_All: '#47D188'
+NK_All: '#F09E51'
+Myeloid_All: '#AC50E6'
+Leukocyte_Other: &leuk '#D6D8D6'
+Other_leuk: *leuk
+Endo: '#F0E862'
+
+## subtype
+T_CD4: '#63C5DA' 
+T_CD8: '#48AAAD' 
+T_Reg4: '#0492C2'
+T_Reg8: '#005558'
+T_RegDN: '#1F456E'
+T_CD4_CD8: '#4488A9' 
+T_Null: '#DBF6F7'
+NK: '#FCAE1E'
+NKT: '#FDA172'
+NKT_CD8: '#D67229'
+NKT_CD4: '#ED820E'
+MHCIIpos_macro: '#B65FCF'
+MHCIIneg_macro: '#6A4596'
+DC: '#FC94AF'
+Other_macro: '#E6CBE7'
+
+superNeg: '#939393'
+UNKNOWN: '#646664'
+
+### overview colors
+clinical:
+    Sex:
+        'M': '#4D7298'                      # dark grayish teal
+        'F': '#ffb4a2'                      # peach (Color CORRECT but missassinged in code)
+    Age_at_diagnosis_abbrev:
+        'under50': '#077B8A'
+        'over50': '#D72631'
+    Type:
+        'ADC': '#92829e'                    # grayish purple
+        'SQCLC': '#90C2E7'                  # sky blue
+        'Poorly differentiated': '#b07d62'  # brown
+    Smoking_status_abbrev:
+        'Smoker': '#F98866'
+        'Non_smoker': '#A1BE95'
+    Patient_history_of_cancer_abbrev:
+        'Yes': '#6290C8'
+        'No': '#f0f0f0'
+    Family_history_of_cancer_abbrev:  # NOT CORRECT FIX
+        'Yes': '#6290C8'
+        'No': '#f0f0f0'
+        'Unknown': 'grey75'
+    Metastasis_brain:
+        'Y': '#6290C8'
+        'N': '#f0f0f0'
+    Metastasis_multiple:
+        'Y': '#6290C8'
+        'N': '#f0f0f0'
+    Prior_treatment_abbrev:
+        'Yes': '#6290C8'
+        'No': '#f0f0f0'
+    Best_overall_response_abbrev:
+        'responder': '#16537e'
+        'non_responder': '#990000'
+    PDL1_percent_score_group:
+        'low': '#fbcbc9'
+        'high': '#be1558'
+    Patient_ID:
+        'L_01': '#427fc3'
+        'L_02': '#e54231'
+        'L_03': '#56aa57'
+        'L_04': '#6d52a7'
+        'L_05': '#ee9135'
+        'L_06': '#ff6347'
+        'L_07': '#fce038'
+        'L_08': '#b4d3e7'
+        'L_09': '#e9779f'
+        'L_10': '#c1dd98'
+        'L_11': '#20b2aa'
+        'L_12': '#f6c97f'
+        'L_13': '#ff4500'
+        'L_14': '#efec95'
+        'L_15': '#c54497'
+        'L_16': '#d49ac4'
+        'L_17': '#9b5da8'
+        'L_18': '#455aac'
+        'L_19': '#456f96'
+        'L_20': '#76cad6'
+        'L_21': '#8585e8'
+        'L_22': '#ff6690'
+        'L_23': '#859847'
+        'L_24': '#c4c748'
+        'L_25': '#8f4b25'
+        'L_26': '#a63a46'
+        'L_27': '#d4afd1'
+        'L_28': '#467bc0'
+        'L_29': '#f0aeaa'
+        'L_30': '#512065'
+        'L_31': '#1c663c'
+        'L_32': '#70c05c'
+
