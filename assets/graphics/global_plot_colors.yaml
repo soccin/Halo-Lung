@@ -1,5 +1,8 @@
 ### celltype colors
 ## category
+
+## Version 2024-07-23
+
 Tumor: &tumor '#EF3340'
 Tumor_All: *tumor
 Immune_All: '#2E86E0'
@@ -56,6 +59,7 @@ clinical:
     Family_history_of_cancer_abbrev:
         'Yes': '#6290C8'
         'No': '#f0f0f0'
+        'Unknown': 'grey75'
     Metastasis_brain:
         'Y': '#6290C8'
         'N': '#f0f0f0'
@@ -104,5 +108,4 @@ clinical:
         'L_30': '#512065'
         'L_31': '#1c663c'
         'L_32': '#70c05c'
-        'Unknown': 'grey75'
 
