@@ -1,0 +1,102 @@
+#!/bin/bash
+
+SDIR="$( cd "$( dirname "$0" )" && pwd )"
+
+VERSION=$(fgrep VERSION VERSIONS | sed 's/.*=//')
+
+setMetadataVar () {
+
+    XVar=$1
+
+    declare -g "${XVar}"=$(./tools/parseYAML.R config/study.yaml $XVar)
+
+    if [ "$DEBUG" == "YES" ]; then
+        echo \$$XVar=${!XVar}
+    fi
+
+}
+
+#
+# Check if data/meta/haloMarkerRenames.yaml
+# exists which means markerScan was done already
+#
+
+setMetadataVar HALOCSV_DIR
+setMetadataVar MARKERS
+setMetadataVar SAMPLES
+
+MARKER_ERRORS=$(cat markerValidation_*.csv  | egrep -v ",WARNING|,FOV" )
+
+if [ "$MARKER_ERRORS" != "" ]; then
+    echo
+    echo Marker validation errors
+    echo
+    cat markerValidation_*.csv  | egrep -v ",Unexpected_All_Neg" | awk '{print "    "$0}'
+    echo
+    exit -1
+fi
+
+####################################################################
+#
+
+rm -rf LSF*
+
+####################################################################
+#
+# Do Cell Type reassignment
+#
+
+ls rda/${VERSION}_Exclusion/L_0*rda \
+    | parallel -j 20 Rscript config/scripts/reassign03.R config/study.yaml 2>&1 | tee reassign.log
+mkdir -p out/reassign/03
+mv stats_Reassign03_* out/reassign/03
+Rscript config/scripts/makeReassign03Report.R
+mkdir -p rda/${VERSION}_Reassign
+mv L*rda rda/${VERSION}_Reassign/
+
+
+####################################################################
+#
+
+echo
+echo Get Cell Types
+echo
+
+time Rscript --no-save HaloX/getCellAtlasV2.R FILE_TAG=PhaseI \
+    config/study.yaml \
+    rda/${VERSION}_Reassign
+
+ERROR=$?
+if [ "$ERROR" != "0" ]; then
+    echo
+    echo "Error: Probably need to set proper R version"
+    echo "ERR="$ERROR
+    echo
+    exit 1
+fi
+
+mkdir -p rda/${VERSION}_Atlas
+mkdir -p rda/${VERSION}_Atlas/BySample
+mv cellAtlas*.rda rda/${VERSION}_Atlas
+mv *___CellTypes__ExcludeFilt.rda rda/${VERSION}_Atlas/BySample
+
+time Rscript --no-save HaloX/getCellGeom.R FILE_TAG=PhaseI \
+    rda/${VERSION}_Reassign
+
+####################################################################
+#
+
+ls rda/${VERSION}_Reassign/*rda \
+    | parallel -j 16 Rscript --no-save HaloX/normalizeIntensties.R
+
+
+mkdir -p rda/${VERSION}_Normalized
+mv *__Normalized.rda rda/${VERSION}_Normalized/
+
+Rscript --no-save HaloX/extractNormIntensities.R rda/${VERSION}_Normalized/*rda
+
+echo
+echo
+echo "Done with Phase-II"
+echo
+echo
