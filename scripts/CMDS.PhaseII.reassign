@@ -115,11 +115,6 @@ time Rscript --no-save HaloX/getCellGeom.R FILE_TAG=PhaseI \
 ####################################################################
 #
 
-echo
-echo Need to fix normalizeIntensties.R
-echo
-exit 1
-
 ls rda/${STAGE_04}/*rda \
     | parallel -j 16 Rscript --no-save HaloX/normalizeIntensties.R
 
