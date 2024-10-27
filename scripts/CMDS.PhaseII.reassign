@@ -85,7 +85,8 @@ rm -rf LSF/
 ####################################################################
 #
 
-STAGE_04=${VERSION}_04_Reset
+STAGE_04=${VERSION}_Final
+ln -s $(realpath rda/v6_04_Reset) rda/$STAGE_04
 
 echo
 echo Get Cell Types
