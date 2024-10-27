@@ -9,21 +9,23 @@ if(length(argv)<2) {
 }
 
 require(tidyverse)
-cellDiveId=argv[1]
-rdaFile=fs::dir_ls("rda/v6_Exclusion",regex=cc(cellDiveId,"__Halo"))
+rdaRootFolder=argv[1]
+cellDiveId=argv[2]
+rdaFile=fs::dir_ls(rdaRootFolder,regex=cc(cellDiveId,"__Halo"))
 
-newPDL1Threshold=argv[2]
+newPDL1Threshold=argv[3]
+
+rdaOutputFolder="rda/v6_04_Reset"
 
 if(newPDL1Threshold=="NA") {
-  cat("\n\nNew threshold is NA just copying the original rda file\n\n")
-  fs::dir_create("rda/v6_Reset")
-  fs::file_copy(rdaFile,fs::path("rda/v6_Reset",basename(rdaFile)),overwrite=T)
+  cat("\n\nNew threshold is `NA`; just copying the original rda file\n\n")
+  fs::dir_create(rdaOutputFolder)
+  fs::file_copy(rdaFile,fs::path(rdaOutputFolder,basename(rdaFile)),overwrite=T)
   quit()
 }
 
 newPDL1Threshold=as.numeric(newPDL1Threshold)
 
-rdaFile=fs::dir_ls("rda/v6_Reassign",regex=cc(cellDiveId,"__Halo"))
 oo=readRDS(rdaFile)
 
 thetaOrig=oo$thetas %>%
@@ -70,7 +72,7 @@ stats=oo$marker.data %>%
 fs::dir_create("out/resetPDL1")
 write_csv(stats,fs::path("out/resetPDL1",cc(cellDiveId,"_resetPDL1_stats.csv")))
 
-fs::dir_create("rda/v6_Reset")
-saveRDS(oo,fs::path("rda/v6_Reset",basename(rdaFile)),compress=T)
+fs::dir_create(rdaOutputFolder)
+saveRDS(oo,fs::path(rdaOutputFolder,basename(rdaFile)),compress=T)
 
 
