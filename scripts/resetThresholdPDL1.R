@@ -10,7 +10,7 @@ if(length(argv)<2) {
 
 require(tidyverse)
 cellDiveId=argv[1]
-rdaFile=fs::dir_ls("rda/v6_Reassign",regex=cc(cellDiveId,"__Halo"))
+rdaFile=fs::dir_ls("rda/v6_Exclusion",regex=cc(cellDiveId,"__Halo"))
 
 newPDL1Threshold=argv[2]
 
