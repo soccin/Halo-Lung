@@ -43,6 +43,22 @@ rm -rf LSF*
 
 ####################################################################
 #
+# Do Cell Type reassignment
+#
+
+STAGE_03=${VERSION}_03_Reassign
+
+ls rda/${VERSION}_Exclusion/L_0*rda \
+    | parallel -j 20 Rscript config/scripts/reassign03.R config/study.yaml 2>&1 | tee reassign.log
+mkdir -p out/reassign/03
+mv stats_Reassign03_* out/reassign/03
+Rscript config/scripts/makeReassign03Report.R
+mkdir -p rda/${STAGE_03}/
+mv L*rda rda/${STAGE_03}/
+
+
+####################################################################
+#
 # Do Reset of PDL1 threshold
 #
 
@@ -50,7 +66,7 @@ cat config/assets/data/PDL1_AdjustedThresholds.csv \
     | tr ',' ' ' \
     | xargs -n 2 \
         bsub -o LSF/ -J RESET_$$ -n 3 -R "rusage[mem=12]" -R cmorsc1 \
-            Rscript config/scripts/resetThresholdPDL1.R
+            Rscript config/scripts/resetThresholdPDL1.R rda/${STAGE_03}
 
 $SDIR/bin/bSync RESET_$$
 
@@ -68,19 +84,8 @@ rm -rf LSF/
 
 ####################################################################
 #
-# Do Cell Type reassignment
-#
 
-ls rda/${VERSION}_Reset/L_0*rda \
-    | parallel -j 20 Rscript config/scripts/reassign03.R config/study.yaml 2>&1 | tee reassign.log
-mkdir -p out/reassign/03
-mv stats_Reassign03_* out/reassign/03
-Rscript config/scripts/makeReassign03Report.R
-mkdir -p rda/${VERSION}_Reassign
-mv L*rda rda/${VERSION}_Reassign/
-
-####################################################################
-#
+STAGE_04=${VERSION}_04_Reset
 
 echo
 echo Get Cell Types
@@ -88,7 +93,7 @@ echo
 
 time Rscript --no-save HaloX/getCellAtlasV2.R FILE_TAG=PhaseI \
     config/study.yaml \
-    rda/${VERSION}_Reassign
+    rda/${STAGE_04}
 
 ERROR=$?
 if [ "$ERROR" != "0" ]; then
@@ -105,12 +110,17 @@ mv cellAtlas*.rda rda/${VERSION}_Atlas
 mv *___CellTypes__ExcludeFilt.rda rda/${VERSION}_Atlas/BySample
 
 time Rscript --no-save HaloX/getCellGeom.R FILE_TAG=PhaseI \
-    rda/${VERSION}_Reassign
+    rda/${STAGE_04}
 
 ####################################################################
 #
 
-ls rda/${VERSION}_Reassign/*rda \
+echo
+echo Need to fix normalizeIntensties.R
+echo
+exit 1
+
+ls rda/${STAGE_04}/*rda \
     | parallel -j 16 Rscript --no-save HaloX/normalizeIntensties.R
 
 
