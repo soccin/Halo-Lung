@@ -22,5 +22,9 @@ get_pdl1_pos_stats <- function(fi) {
   
 }
 
+ff=fs::dir_ls("rda/v6_Final")
+mm=map(ff,get_pdl1_pos_stats,.progress=T)
+tbl=mm %>% bind_rows %>% spread(Cell_type,PCT.PDL1)
 
+openxlsx::write.xlsx(tbl,"pctPDL1AfterReSet.xlsx")
 
