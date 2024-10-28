@@ -47,20 +47,20 @@ oo$thetas=oo$thetas %>%
 if(newPDL1Threshold<thetaOrig) {
   resetTbl=oo$marker.data %>%
     filter(Marker=="PDL1") %>%
-    select(UUID,Positive_Classification,TIntensity) %>%
+    select(UUID,Marker,Positive_Classification,TIntensity) %>%
     mutate(Positive_Classification=ifelse(TIntensity>newPDL1Threshold,1,Positive_Classification)) %>%
     select(-TIntensity)
 } else {
   resetTbl=oo$marker.data %>%
     filter(Marker=="PDL1") %>%
-    select(UUID,Positive_Classification,TIntensity) %>%
+    select(UUID,Marker,Positive_Classification,TIntensity) %>%
     mutate(Positive_Classification=ifelse(TIntensity<newPDL1Threshold,0,Positive_Classification)) %>%
     select(-TIntensity)
 }
 
 oo$marker.data=oo$marker.data %>%
   mutate(Positive_Classification.orig2=Positive_Classification) %>%
-  rows_update(resetTbl,by="UUID")
+  rows_update(resetTbl,by=c("UUID","Marker"))
 
 stats=oo$marker.data %>%
   filter(Marker=="PDL1") %>%
