@@ -1,6 +1,6 @@
 ### celltype colors
 
-## Version 2024-07-23
+## Version 2025-03-10
 
 ## category
 Tumor: &tumor '#EF3340'
@@ -19,12 +19,12 @@ Other_leuk: *leuk
 Endo: '#F0E862'
 
 ## subtype
-T_CD4: '#63C5DA' 
-T_CD8: '#48AAAD' 
+T_CD4: '#63C5DA'
+T_CD8: '#48AAAD'
 T_Reg4: '#0492C2'
 T_Reg8: '#005558'
 T_RegDN: '#1F456E'
-T_CD4_CD8: '#4488A9' 
+T_CD4_CD8: '#4488A9'
 T_Null: '#DBF6F7'
 NK: '#FCAE1E'
 NKT: '#FDA172'
@@ -36,6 +36,7 @@ DC: '#FC94AF'
 Other_macro: '#E6CBE7'
 
 superNeg: '#939393'
+Negative: '#939393'
 UNKNOWN: '#646664'
 
 ### overview colors
@@ -50,31 +51,90 @@ clinical:
         'ADC': '#92829e'                    # grayish purple
         'SQCLC': '#90C2E7'                  # sky blue
         'Poorly differentiated': '#b07d62'  # brown
+    Sample_type:
+        'Primary': '#3498db'
+        'Metastasis': '#db4f34'
+    Body_part:
+        'Bone': '#A08D79'
+        'Brain': '#E3C16F'
+        'Chest': '#D98B7A'
+        'Liver': '#955251'
+        'Lymph node': '#98B88C'
+        'Lung': '#B4D2DB'
+        'Pleura': '#A0AFC1'
+        'Soft tissue': '#D6A5C0'
+    Body_part_abbrev:
+        'Lung': '#B4D2DB'
+        'Other': '#A8A8A8'
+    Metastasis_brain:
+        'Y': '#6290C8'
+        'N': '#f0f0f0'
+    Metastasis_brain_status:
+        'At surgery': '#5E60CE'
+        'Future': '#FFBA08'
+        'Never': '#A0A0A0'
     Smoking_status_abbrev:
         'Smoker': '#F98866'
         'Non_smoker': '#A1BE95'
     Patient_history_of_cancer_abbrev:
         'Yes': '#6290C8'
         'No': '#f0f0f0'
-    Family_history_of_cancer_abbrev:  # NOT CORRECT FIX
+    Family_history_of_cancer_abbrev:
         'Yes': '#6290C8'
         'No': '#f0f0f0'
         'Unknown': 'grey75'
-    Metastasis_brain:
+    predictive_biomarker:
         'Y': '#6290C8'
         'N': '#f0f0f0'
-    Metastasis_multiple:
-        'Y': '#6290C8'
-        'N': '#f0f0f0'
-    Prior_treatment_abbrev:
-        'Yes': '#6290C8'
-        'No': '#f0f0f0'
-    Best_overall_response_abbrev:
+    Best_overall_response_group:
         'responder': '#16537e'
         'non_responder': '#990000'
-    PDL1_percent_score_group:
-        'low': '#fbcbc9'
+    Best_overall_response_detailed:
+        'CR': '#167D3F'
+        'PR': '#D3CB47'
+        'SD': '#E88840'
+        'POD': '#66352D'
+    PFS_months_group_median:
         'high': '#be1558'
+        'low': '#fbcbc9'
+    PFS_months_group_quartile:
+        'high': '#be1558'
+        'average': '#E78EA6'
+        'low': '#fbcbc9'
+    OS_months_group_median:
+        'high': '#be1558'
+        'low': '#fbcbc9'
+    OS_months_group_quartile:
+        'high': '#be1558'
+        'average': '#E78EA6'
+        'low': '#fbcbc9'
+    PDL1_percent_score_group:
+        'high': '#be1558'
+        'low': '#fbcbc9'
+    Impact_TMB_score_group10:
+        'high': '#be1558'
+        'low': '#fbcbc9'
+        'Unknown': 'grey75'
+    STK11:
+        '1': '#be1558'
+        '0': '#fbcbc9'
+        'Unknown': 'grey75'
+    KEAP1:
+        '1': '#be1558'
+        '0': '#fbcbc9'
+        'Unknown': 'grey75'
+    H&E:
+        'Yes': '#6290C8'
+        'No': '#f0f0f0'
+    mpIF:
+        'Yes': '#6290C8'
+        'No': '#f0f0f0'
+    PDL1_IHC:
+        'Yes': '#6290C8'
+        'No': '#f0f0f0'
+    MSK_IMPACT:
+        'Yes': '#6290C8'
+        'No': '#f0f0f0'
     Patient_ID:
         'L_01': '#427fc3'
         'L_02': '#e54231'
