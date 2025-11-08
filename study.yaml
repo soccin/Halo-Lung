@@ -19,7 +19,7 @@ SAMPLES: ${studyName}_Samples__V0
 MARKERS: ${studyName}_Markers__V0
 FOVS: ${studyName}_FOVs__V0
 CELLTYPES: ${studyName}_CellTypes__V0
-CLINICAL: ${studyName}_Clinical__V10
+CLINICAL: ${studyName}_Clinical__V13
 
 
 #
