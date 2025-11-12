@@ -41,6 +41,10 @@ UNKNOWN: '#646664'
 
 ### overview colors
 clinical:
+    Pembro_status:
+        'Front-line': '#7982a6'
+        'Second-line': '#a69978'
+        'Third-line': '#754c29'
     Sex:
         'M': '#4D7298'                      # dark grayish teal
         'F': '#ffb4a2'                      # peach (Color CORRECT but missassinged in code)
