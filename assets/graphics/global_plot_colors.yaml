@@ -82,8 +82,8 @@ clinical:
         'Future': '#FFBA08'
         'Never': '#A0A0A0'
     Smoking_status_abbrev:
-        'Smoker': '#F98866'
-        'Non_smoker': '#A1BE95'
+        'Ever_smoker': '#F98866'
+        'Never_smoker': '#A1BE95'
     Patient_history_of_cancer_abbrev:
         'Yes': '#6290C8'
         'No': '#f0f0f0'
