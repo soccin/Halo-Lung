@@ -1,5 +1,6 @@
 Patient_ID
 Pembro_status
+Sample_pretreated
 Sex
 Age_at_diagnosis_abbrev
 Type
@@ -18,7 +19,7 @@ PFS_months_group_median
 PFS_months_group_quartile
 OS_months_group_median
 OS_months_group_quartile
-PDL1_percent_score_group
+PDL1_IHC_percent_DrYang_group
 Impact_TMB_score_group10
 STK11
 KEAP1

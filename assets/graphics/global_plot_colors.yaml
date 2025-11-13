@@ -45,6 +45,10 @@ clinical:
         'Front-line': '#7982a6'
         'Second-line': '#a69978'
         'Third-line': '#754c29'
+    Sample_pretreated:
+        'Systemic': '#5c4221'
+        'Radiation': '#a55625'
+        'N': '#cae1ea'
     Sex:
         'M': '#4D7298'                      # dark grayish teal
         'F': '#ffb4a2'                      # peach (Color CORRECT but missassinged in code)
@@ -64,11 +68,11 @@ clinical:
         'Chest': '#D98B7A'
         'Liver': '#955251'
         'Lymph node': '#98B88C'
-        'Lung': '#B4D2DB'
+        'Lung': '#d73995'
         'Pleura': '#A0AFC1'
         'Soft tissue': '#D6A5C0'
     Body_part_abbrev:
-        'Lung': '#B4D2DB'
+        'Lung': '#d73995'
         'Other': '#A8A8A8'
     Metastasis_brain:
         'Y': '#6290C8'
@@ -113,8 +117,9 @@ clinical:
         'average': '#E78EA6'
         'low': '#fbcbc9'
     PDL1_percent_score_group:
-        'high': '#be1558'
-        'low': '#fbcbc9'
+        'high': '#eb6e25'
+        'low': '#f7d1a8'
+        'NA': '#c2c1c1'
     Impact_TMB_score_group10:
         'high': '#be1558'
         'low': '#fbcbc9'
