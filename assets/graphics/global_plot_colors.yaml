@@ -116,7 +116,7 @@ clinical:
         'high': '#be1558'
         'average': '#E78EA6'
         'low': '#fbcbc9'
-    PDL1_percent_score_group:
+    PDL1_IHC_percent_DrYang_group:
         'high': '#eb6e25'
         'low': '#f7d1a8'
         'NA': '#c2c1c1'
